@@ -16,7 +16,7 @@ res=()
 stat=()
 
 # trigger jobs 
-for i in {1..10}
+for i in {1..4}
 do
 	task_id=`http POST http://localhost:8000/create number="$i" | jq -r '.data.task_id'`
 	res+=("$task_id")
