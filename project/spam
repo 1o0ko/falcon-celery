@@ -1,0 +1,51 @@
+#!/bin/bash
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
+
+res=()
+stat=()
+
+# trigger jobs 
+for i in {1..10}
+do
+	task_id=`http POST http://localhost:8000/create number="$i" | jq -r '.data.task_id'`
+	res+=("$task_id")
+	echo "Submited $task_id"
+done
+
+length_res=${#res[*]}
+
+while true ; do
+	sleep 1
+	# wait for successfull tasks
+	for task_id in "${res[@]}"
+	do
+  		task_status=`curl http://localhost:8000/status/${task_id} -s | jq -r '.status'`
+  		task_result=`curl http://localhost:8000/status/${task_id} -s | jq -r '.result'`
+
+		if [ "$task_status" ==  "SUCCESS" ]; then
+			if [ $(contains "${stat[@]}" $task_id) == "n" ]; then
+				echo "Finished task $task_id: $task_result"
+				stat+=("$task_id")
+			fi
+		fi
+	done
+	
+	# check if done
+	length_stat=${#stat[*]}
+	if [ "$length_res" -eq "$length_stat" ]; then
+		break
+	fi
+done
+
+echo "All task done!"

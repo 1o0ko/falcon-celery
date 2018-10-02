@@ -1,16 +1,53 @@
 # project/app/__init__.py
-
-
 import json
-
 import falcon
 
+from app.tasks import TaskWithModel
+from app.tasks import app as celery_app
 
-class Ping(object):
-    def on_get(self, req, resp):
+from app.ml import Model
+from celery.result import AsyncResult
+
+
+class CreateTask:
+    def __init__(self, task):
+        self.task = task
+
+    def on_post(self, req, resp):
+        # loads the data from request
+        raw_json = req.stream.read()
+        result = json.loads(raw_json, encoding='utf-8')
+        number = int(result['number'])
+
+        # do the task
+        task = self.task.delay(number)
+
+        # repares the response
         resp.status = falcon.HTTP_200
-        resp.body = json.dumps('pong!')
+        result = {
+            'status': 'success',
+            'data': {
+                'task_id': task.id
+            }
+        }
+        resp.body = json.dumps(result)
+
+
+class CheckStatus:
+    def on_get(self, req, resp, task_id):
+        task_result = AsyncResult(task_id)
+        result = {
+            'status': task_result.status,
+            'result': task_result.result
+        }
+
+        resp.status = falcon.HTTP_200
+        resp.body = json.dumps(result)
+
+
+model_task = TaskWithModel(Model())
+celery_app.tasks.register(model_task)
 
 app = falcon.API()
-
-app.add_route('/ping', Ping())
+app.add_route('/create', CreateTask(model_task))
+app.add_route('/status/{task_id}', CheckStatus())
