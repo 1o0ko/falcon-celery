@@ -1,7 +1,8 @@
-import os
+'''
+Model wrapper
+'''
 import logging
-
-from time import sleep
+import os
 
 from celery import Celery
 from celery import Task
@@ -21,5 +22,6 @@ class TaskWithModel(Task):
     def run(self, x):
         logger = logging.getLogger(__name__)
         logger.info(f"Calling model: {x}")
+
 
         return self.model.predict(x)
