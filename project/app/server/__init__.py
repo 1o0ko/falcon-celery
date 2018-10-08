@@ -40,6 +40,7 @@ class CheckStatus:
     def on_get(self, req, resp, task_id):
         task_result = AsyncResult(task_id)
         result = {
+            'task_id': task_id,
             'status': task_result.status,
             'result': task_result.result
         }

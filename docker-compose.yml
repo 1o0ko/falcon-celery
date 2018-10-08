@@ -1,6 +1,15 @@
 version: '3.5'
 
 services:
+  client:
+    image: python:3.7-alpine
+    container_name: client
+    ports:
+      - '5000:5000'
+    volumes:
+      - './project/app/client/:/client/'
+    command: python -m http.server 5000 --directory /client
+
   server:
     build: ./project
     image: server
