@@ -1,6 +1,5 @@
 // custom javascript
 $( document ).ready(() => {
-  console.log('Sanity Check!');
 	$('.btn').on('click', function() {
 	  $('#spinner').toggle();
 	  $.ajax({
