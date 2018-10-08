@@ -1,11 +1,11 @@
-# project/app/__init__.py
+# project/app/server/__init__.py
 import json
 import falcon
 
-from app.tasks import TaskWithModel
-from app.tasks import app as celery_app
+from server.ml import Model
+from server.tasks import TaskWithModel
+from server.tasks import app as celery_app
 
-from app.ml import Model
 from celery.result import AsyncResult
 
 
