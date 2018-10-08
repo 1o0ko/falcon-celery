@@ -1,4 +1,7 @@
 # project/app/server/__init__.py
+'''
+Super smart tasks
+'''
 import json
 import falcon
 
@@ -45,9 +48,9 @@ class CheckStatus:
         resp.body = json.dumps(result)
 
 
-model_task = TaskWithModel(Model())
-celery_app.tasks.register(model_task)
+task = TaskWithModel(Model())
+celery_app.tasks.register(task)
 
 app = falcon.API()
-app.add_route('/create', CreateTask(model_task))
+app.add_route('/create', CreateTask(task))
 app.add_route('/status/{task_id}', CheckStatus())

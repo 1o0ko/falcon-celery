@@ -2,7 +2,7 @@
 
 # trigger jobs
 test=`curl -X POST http://localhost:8000/create \
-    -d '{"number":"2"}' \
+    -d '{"number": 2}' \
     -H "Content-Type: application/json" \
     -s \
 | jq -r '.data.task_id'`

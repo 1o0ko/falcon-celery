@@ -27,3 +27,10 @@
 [2018-10-08 08:45:06,844: INFO/ForkPoolWorker-1] Calling model: 2
 [2018-10-08 08:45:08,849: INFO/ForkPoolWorker-1] 1
 [2018-10-08 08:45:08,857: INFO/ForkPoolWorker-1] Task model_task[b426e74c-cdf4-4558-b03a-5d5b8cbf1c38] succeeded in 2.0123695000074804s: 3
+[2018-10-08 08:49:39,462: INFO/MainProcess] Connected to redis://redis:6379/0
+[2018-10-08 08:49:39,475: INFO/MainProcess] mingle: searching for neighbors
+[2018-10-08 08:49:40,497: INFO/MainProcess] mingle: all alone
+[2018-10-08 08:49:40,511: INFO/MainProcess] celery@8ea9202bbe58 ready.
+[2018-10-08 08:49:43,949: INFO/MainProcess] Received task: task_with_a_model[d1b3d3de-5576-476b-b76e-feddfbd349d4]  
+[2018-10-08 08:49:44,327: INFO/MainProcess] Events of group {task} enabled by remote.
+[2018-10-08 08:49:45,962: INFO/ForkPoolWorker-1] Task task_with_a_model[d1b3d3de-5576-476b-b76e-feddfbd349d4] succeeded in 2.0095241999952123s: 3

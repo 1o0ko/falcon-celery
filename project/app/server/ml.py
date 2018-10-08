@@ -1,3 +1,6 @@
+'''
+Stupid model
+'''
 import logging
 from time import sleep
 
@@ -11,5 +14,5 @@ class Model:
         sleep(2)
 
         logger = logging.getLogger(__name__)
-        logger.info(self.called)
+        logger.debug(f"I've been called {self.called} times")
         return x + 1
