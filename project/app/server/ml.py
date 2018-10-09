@@ -7,6 +7,8 @@ from time import sleep
 
 class Model:
     def __init__(self):
+        logger = logging.getLogger(__name__)
+        logger.info("Loading the model")
         self.called = 0
 
     def predict(self, x):

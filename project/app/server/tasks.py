@@ -18,6 +18,8 @@ class TaskWithModel(Task):
     name = 'task.with_a_model'
 
     def __init__(self, model):
+        logger = logging.getLogger(__name__)
+        logger.info("Initializing TaskWithAModel")
         self.model = model
 
     def run(self, x):

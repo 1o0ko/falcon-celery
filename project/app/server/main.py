@@ -1,11 +1,19 @@
 '''
 Super smart tasks
 '''
+import os
 import json
+import logging
+logging.basicConfig(
+    format="%(asctime)s [%(threadName)s] [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO)
+
 import falcon
 
 from celery.result import AsyncResult
 from server.tasks import task_with_model
+from server import images
 
 
 class CreateTask:
@@ -45,6 +53,23 @@ class CheckStatus:
         resp.body = json.dumps(result)
 
 
-app = falcon.API()
-app.add_route('/create', CreateTask(task_with_model))
-app.add_route('/status/{task_id}', CheckStatus())
+def create_app(image_store):
+    logger = logging.getLogger(__name__)
+    app = falcon.API()
+
+    # Model API
+    app.add_route('/create', CreateTask(task_with_model))
+    app.add_route('/status/{task_id}', CheckStatus())
+
+    # Images API
+    app.add_route('/images', images.Collection(image_store))
+    app.add_route('/images/{name}', images.Item(image_store))
+
+    logger.info('Ready to serve!')
+    return app
+
+
+def get_app():
+    storage_path = os.environ.get('STORAGE_PATH', '.')
+    image_store = images.ImageStore(storage_path)
+    return create_app(image_store)

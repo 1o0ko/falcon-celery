@@ -18,10 +18,12 @@ services:
       - '8000:8000'
     volumes:
       - './project/app/:/usr/src/app'
-    command: gunicorn -b 0.0.0.0:8000 server.main:app
+      - './project/temp/storage:/storage'
+    command: "gunicorn --reload -b 0.0.0.0:8000 'server.main:get_app()'"
     environment:
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
+      - STORAGE_PATH=/storage
     depends_on:
       - redis
 
@@ -29,7 +31,7 @@ services:
     image: server
     volumes:
       - './project/app/:/usr/src/app'
-      - './project/logs:/logs'
+      - './project/temp/logs:/logs'
     command: celery -A server.tasks worker --loglevel=info --logfile=/logs/celery.log -c 1
     environment:
       - CELERY_BROKER=redis://redis:6379/0
