@@ -18,7 +18,7 @@ services:
       - '8000:8000'
     volumes:
       - './project/app/:/usr/src/app'
-    command: gunicorn -b 0.0.0.0:8000 server:app
+    command: gunicorn -b 0.0.0.0:8000 server.main:app
     environment:
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
